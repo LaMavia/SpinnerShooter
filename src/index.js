@@ -14,11 +14,11 @@ window.setup = function (){
 window.draw = function (){
   background(10)
   translate(width / 2, height / 2)
-  fill(255,100,100)
-  player.update()
-  player.draw()
   enemies.forEach(enemy => {
     enemy.update()
     enemy.draw()
   })
+  fill(255,100,100)
+  player.update()
+  player.draw()
 }

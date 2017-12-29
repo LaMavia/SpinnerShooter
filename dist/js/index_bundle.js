@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -68,36 +68,18 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__p5__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__p5___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__p5__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Math__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_Player__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__classes_Enemy__ = __webpack_require__(4);
-
-
-
-
-
-const W = window.innerWidth, H = window.innerHeight
-const enemies = []
-let player = new __WEBPACK_IMPORTED_MODULE_2__classes_Player__["a" /* default */](400, 50, enemies)
-window.setup = function (){
-  createCanvas(W,H)
-  background(10)
-  enemies.push(new __WEBPACK_IMPORTED_MODULE_3__classes_Enemy__["a" /* default */](0, 0, 200, "shooter"))
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return polarToCart; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return rand; });
+const polarToCart = (r,angle) => {
+  return {
+    x: r * Math.cos(angle),
+    y: r * Math.sin(angle)
+  }
 }
-window.draw = function (){
-  background(10)
-  translate(width / 2, height / 2)
-  fill(255,100,100)
-  player.update()
-  player.draw()
-  enemies.forEach(enemy => {
-    enemy.update()
-    enemy.draw()
-  })
-}
+
+const rand = (max, min = 0) => 
+  Math.floor(Math.random() * (max - min) + min)
+
 
 /***/ }),
 /* 1 */
@@ -71509,10 +71491,46 @@ module.exports = p5;
 
 },{"../core/core":55,"./p5.Geometry":102}]},{},[46])(46)
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
 /* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__p5__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__p5___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__p5__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Math__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_Player__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__classes_Enemy__ = __webpack_require__(5);
+
+
+
+
+
+const W = window.innerWidth, H = window.innerHeight
+const enemies = []
+let player = new __WEBPACK_IMPORTED_MODULE_2__classes_Player__["a" /* default */](400, 50, enemies)
+window.setup = function (){
+  createCanvas(W,H)
+  background(10)
+  enemies.push(new __WEBPACK_IMPORTED_MODULE_3__classes_Enemy__["a" /* default */](0, 0, 200, "shooter"))
+}
+window.draw = function (){
+  background(10)
+  translate(width / 2, height / 2)
+  enemies.forEach(enemy => {
+    enemy.update()
+    enemy.draw()
+  })
+  fill(255,100,100)
+  player.update()
+  player.draw()
+}
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports) {
 
 var g;
@@ -71539,11 +71557,11 @@ module.exports = g;
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Math__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Math__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__p5__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__p5___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__p5__);
 
@@ -71563,7 +71581,7 @@ class Player{
       this.maxDX = 0.04
     this.y = 0
       this.dy = 0
-    this.speed = .02
+    this.speed = .025
     this.color = [255,255,255]
 
     this.isAlive = true
@@ -71582,39 +71600,49 @@ class Player{
   didTouch(){
     let res = false
     this.enemies.forEach(enemy => {
-      const distance = dist(this.x, this.y, enemy.x, enemy.y)
-      if(distance <= this.s / 2 + enemy.s / 2){
-        res = true
-      }
+      enemy.projs.forEach(proj => {
+        const distance = dist(this.x, this.y, proj.x, proj.y)
+        if(distance <= this.s / 2 + proj.size / 2){
+          res = true
+        }
+      })
     })
     return res
   }
 
   move(fX, fY){
-    this.isAlive = !this.didTouch()
-    console.log(this.isAlive)
     if(this.isAlive){
       //Updating acceleration based on applied force
       this.dx += this.speed * fX // Angle
       this.dy += this.speed * fY * 100 // Radius = distance from center
       
-      // Checking max speed
+      // Checking max speed (X)
       if(this.dx > this.maxDX || this.dx < -this.maxDX) {
         this.dx = this.maxDX * Math.sign(this.dx)
       }
-    }else{
-      this.color = [255,0,0]
+      
     }
   }
 
   update(){
-    this.angle += this.dx
-    this.r += this.dy
-    this.dy /= 1.3
-    // polarToCart => {x:number, y:number}
-    let {x,y} = Object(__WEBPACK_IMPORTED_MODULE_0__Math__["a" /* polarToCart */])(this.r, this.angle)
-    this.x = x
-    this.y = y
+    if(this.isAlive){
+      this.isAlive = !this.didTouch()
+      this.angle += this.dx
+      if(this.r < width / 2){
+        this.r += this.dy
+      } else{
+        this.r = width / 2 - .001
+        this.dy = 0
+      }
+      this.dy /= 1.3
+      // polarToCart => {x:number, y:number}
+      let {x,y} = Object(__WEBPACK_IMPORTED_MODULE_0__Math__["a" /* polarToCart */])(this.r, this.angle)
+      this.x = x
+      this.y = y
+    }
+    else{
+      this.color = [255,0,0]
+    }
   }
 
   draw(){
@@ -71627,52 +71655,348 @@ class Player{
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Math__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Math__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__p5__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__p5___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__p5__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Projectile__ = __webpack_require__(6);
 
 
-class Enemy{
-  constructor(r, angle, s, type){
+
+class Enemy {
+  constructor(r, angle, s, type) {
     this.r = r
     this.angle = angle
     this.s = s
     this.type = type
-
+    this.projs = []
+    this.maxProjectiles = 10
+    this.minProjectiles = 35
     this.x = 0
     this.y = 0
   }
 
-  update(){
-    // polarToCart => {x:number, y:number}
-    let {x,y} = Object(__WEBPACK_IMPORTED_MODULE_0__Math__["a" /* polarToCart */])(this.r, this.angle)
-    this.x = x
-    this.y = y
+  shoot([n, _this]) {
+
+    const projectiles = []
+    const projectileSize = 40
+    for (let i = 0; i < n; i++) {
+      projectiles.push(
+        new __WEBPACK_IMPORTED_MODULE_2__Projectile__["a" /* default */](
+          { x: _this.x, y: _this.y },
+          projectileSize,
+          360 / n * i,
+          0.02,
+          0.005,
+        )
+      )
+    }
+    projectiles.forEach(proj => proj.arr = projectiles)
+    _this.projs = projectiles
   }
 
-  draw(){
-    fill(255,50,50)
+  update() {
+    // polarToCart => {x:number, y:number}
+    let { x, y } = Object(__WEBPACK_IMPORTED_MODULE_0__Math__["a" /* polarToCart */])(this.r, this.angle)
+    this.x = x
+    this.y = y
+    if(this.projs.length < 1){
+      setTimeout(this.shoot, Object(__WEBPACK_IMPORTED_MODULE_0__Math__["b" /* rand */])(800, 200), [Object(__WEBPACK_IMPORTED_MODULE_0__Math__["b" /* rand */])(this.maxProjectiles,this.minProjectiles), this])
+    }
+  }
+
+  draw() {
+    this.projs.forEach(proj => {
+      proj.update()
+      proj.draw()
+    })
+    fill(255, 50, 50)
     ellipse(this.x, this.y, this.s, this.s)
   }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Enemy;
 
 
+
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return polarToCart; });
-const polarToCart = (r,angle) => {
-  return {
-    x: r * Math.cos(angle),
-    y: r * Math.sin(angle)
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Math__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_uuid__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_uuid___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_uuid__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__p5__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__p5___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__p5__);
+
+
+
+class Projectile{
+  constructor({ x, y }, size, angle, velocity, acceleration, player){
+    this.startX = x
+    this.startY = y
+    this.x = x
+    this.y = y
+    this.size = size
+    this.angle = angle
+    this.v = velocity
+    this.r = 0
+    this.alpha = 255
+    this.acc = acceleration
+    this.range = 500 // Disapears after reaching that range
+    this.arr = []
+    this.id = __WEBPACK_IMPORTED_MODULE_1_uuid___default.a.v4()
+  }
+
+  update(){
+    this.size -= this.r / 2300
+    this.v += this.acc
+    this.r += this.v
+    let { x, y } = Object(__WEBPACK_IMPORTED_MODULE_0__Math__["a" /* polarToCart */])(this.r, this.angle)
+    this.x = x
+    this.y = y
+
+    if(this.r + this.size / 2 > this.range || this.alpha <= 0){
+      const i = this.arr.findIndex(it => it.id === this.id)
+      this.arr.splice(i,1)
+      console.log(this.arr.length)
+    }
+  }
+
+  draw(){
+    fill(100,100,220, this.alpha)
+    translate(this.startX, this.startY)
+    ellipse(this.x, this.y, this.size, this.size)
   }
 }
+/* harmony export (immutable) */ __webpack_exports__["a"] = Projectile;
 
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {// Unique ID creation requires a high quality random # generator.  In the
+// browser this is a little complicated due to unknown quality of Math.random()
+// and inconsistent support for the `crypto` API.  We do the best we can via
+// feature-detection
+var rng;
+
+var crypto = global.crypto || global.msCrypto; // for IE 11
+if (crypto && crypto.getRandomValues) {
+  // WHATWG crypto RNG - http://wiki.whatwg.org/wiki/Crypto
+  var rnds8 = new Uint8Array(16); // eslint-disable-line no-undef
+  rng = function whatwgRNG() {
+    crypto.getRandomValues(rnds8);
+    return rnds8;
+  };
+}
+
+if (!rng) {
+  // Math.random()-based (RNG)
+  //
+  // If all else fails, use Math.random().  It's fast, but is of unspecified
+  // quality.
+  var rnds = new Array(16);
+  rng = function() {
+    for (var i = 0, r; i < 16; i++) {
+      if ((i & 0x03) === 0) r = Math.random() * 0x100000000;
+      rnds[i] = r >>> ((i & 0x03) << 3) & 0xff;
+    }
+
+    return rnds;
+  };
+}
+
+module.exports = rng;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+/**
+ * Convert array of 16 byte values to UUID string format of the form:
+ * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+ */
+var byteToHex = [];
+for (var i = 0; i < 256; ++i) {
+  byteToHex[i] = (i + 0x100).toString(16).substr(1);
+}
+
+function bytesToUuid(buf, offset) {
+  var i = offset || 0;
+  var bth = byteToHex;
+  return bth[buf[i++]] + bth[buf[i++]] +
+          bth[buf[i++]] + bth[buf[i++]] + '-' +
+          bth[buf[i++]] + bth[buf[i++]] + '-' +
+          bth[buf[i++]] + bth[buf[i++]] + '-' +
+          bth[buf[i++]] + bth[buf[i++]] + '-' +
+          bth[buf[i++]] + bth[buf[i++]] +
+          bth[buf[i++]] + bth[buf[i++]] +
+          bth[buf[i++]] + bth[buf[i++]];
+}
+
+module.exports = bytesToUuid;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var v1 = __webpack_require__(10);
+var v4 = __webpack_require__(11);
+
+var uuid = v4;
+uuid.v1 = v1;
+uuid.v4 = v4;
+
+module.exports = uuid;
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var rng = __webpack_require__(7);
+var bytesToUuid = __webpack_require__(8);
+
+// **`v1()` - Generate time-based UUID**
+//
+// Inspired by https://github.com/LiosK/UUID.js
+// and http://docs.python.org/library/uuid.html
+
+// random #'s we need to init node and clockseq
+var _seedBytes = rng();
+
+// Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
+var _nodeId = [
+  _seedBytes[0] | 0x01,
+  _seedBytes[1], _seedBytes[2], _seedBytes[3], _seedBytes[4], _seedBytes[5]
+];
+
+// Per 4.2.2, randomize (14 bit) clockseq
+var _clockseq = (_seedBytes[6] << 8 | _seedBytes[7]) & 0x3fff;
+
+// Previous uuid creation time
+var _lastMSecs = 0, _lastNSecs = 0;
+
+// See https://github.com/broofa/node-uuid for API details
+function v1(options, buf, offset) {
+  var i = buf && offset || 0;
+  var b = buf || [];
+
+  options = options || {};
+
+  var clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq;
+
+  // UUID timestamps are 100 nano-second units since the Gregorian epoch,
+  // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
+  // time is handled internally as 'msecs' (integer milliseconds) and 'nsecs'
+  // (100-nanoseconds offset from msecs) since unix epoch, 1970-01-01 00:00.
+  var msecs = options.msecs !== undefined ? options.msecs : new Date().getTime();
+
+  // Per 4.2.1.2, use count of uuid's generated during the current clock
+  // cycle to simulate higher resolution clock
+  var nsecs = options.nsecs !== undefined ? options.nsecs : _lastNSecs + 1;
+
+  // Time since last uuid creation (in msecs)
+  var dt = (msecs - _lastMSecs) + (nsecs - _lastNSecs)/10000;
+
+  // Per 4.2.1.2, Bump clockseq on clock regression
+  if (dt < 0 && options.clockseq === undefined) {
+    clockseq = clockseq + 1 & 0x3fff;
+  }
+
+  // Reset nsecs if clock regresses (new clockseq) or we've moved onto a new
+  // time interval
+  if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === undefined) {
+    nsecs = 0;
+  }
+
+  // Per 4.2.1.2 Throw error if too many uuids are requested
+  if (nsecs >= 10000) {
+    throw new Error('uuid.v1(): Can\'t create more than 10M uuids/sec');
+  }
+
+  _lastMSecs = msecs;
+  _lastNSecs = nsecs;
+  _clockseq = clockseq;
+
+  // Per 4.1.4 - Convert from unix epoch to Gregorian epoch
+  msecs += 12219292800000;
+
+  // `time_low`
+  var tl = ((msecs & 0xfffffff) * 10000 + nsecs) % 0x100000000;
+  b[i++] = tl >>> 24 & 0xff;
+  b[i++] = tl >>> 16 & 0xff;
+  b[i++] = tl >>> 8 & 0xff;
+  b[i++] = tl & 0xff;
+
+  // `time_mid`
+  var tmh = (msecs / 0x100000000 * 10000) & 0xfffffff;
+  b[i++] = tmh >>> 8 & 0xff;
+  b[i++] = tmh & 0xff;
+
+  // `time_high_and_version`
+  b[i++] = tmh >>> 24 & 0xf | 0x10; // include version
+  b[i++] = tmh >>> 16 & 0xff;
+
+  // `clock_seq_hi_and_reserved` (Per 4.2.2 - include variant)
+  b[i++] = clockseq >>> 8 | 0x80;
+
+  // `clock_seq_low`
+  b[i++] = clockseq & 0xff;
+
+  // `node`
+  var node = options.node || _nodeId;
+  for (var n = 0; n < 6; ++n) {
+    b[i + n] = node[n];
+  }
+
+  return buf ? buf : bytesToUuid(b);
+}
+
+module.exports = v1;
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var rng = __webpack_require__(7);
+var bytesToUuid = __webpack_require__(8);
+
+function v4(options, buf, offset) {
+  var i = buf && offset || 0;
+
+  if (typeof(options) == 'string') {
+    buf = options == 'binary' ? new Array(16) : null;
+    options = null;
+  }
+  options = options || {};
+
+  var rnds = options.random || (options.rng || rng)();
+
+  // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
+  rnds[6] = (rnds[6] & 0x0f) | 0x40;
+  rnds[8] = (rnds[8] & 0x3f) | 0x80;
+
+  // Copy bytes to buffer, if provided
+  if (buf) {
+    for (var ii = 0; ii < 16; ++ii) {
+      buf[i + ii] = rnds[ii];
+    }
+  }
+
+  return buf || bytesToUuid(rnds);
+}
+
+module.exports = v4;
 
 
 /***/ })
