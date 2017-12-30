@@ -7,4 +7,6 @@ const polarToCart = (r,angle) => {
 
 const rand = (max, min = 0) => 
   Math.floor(Math.random() * (max - min) + min)
-export {polarToCart, rand}
+
+const sum = (prev, curr) => prev + curr
+export {polarToCart, rand, sum}

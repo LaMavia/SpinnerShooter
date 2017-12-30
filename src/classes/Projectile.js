@@ -29,13 +29,14 @@ export default class Projectile{
     if(this.r + this.size / 2 > this.range || this.alpha <= 0){
       const i = this.arr.findIndex(it => it.id === this.id)
       this.arr.splice(i,1)
-      console.log(this.arr.length)
     }
   }
 
   draw(){
+    push()
     fill(100,100,220, this.alpha)
     translate(this.startX, this.startY)
     ellipse(this.x, this.y, this.size, this.size)
+    pop()
   }
 }

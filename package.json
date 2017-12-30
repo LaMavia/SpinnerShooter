@@ -4,7 +4,9 @@
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "keywords": [
     "Electron",
@@ -12,6 +14,7 @@
     "Game",
     "Webpack"
   ],
+  "postinstall": "electron-builder install-app-deps",
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
