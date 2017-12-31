@@ -5,11 +5,11 @@ import Projectile from "./Projectile"
  *@todo Add Enemy types:
     follower...
 */
-export default class Enemy {
+export default class FatMan {
   constructor(x, y, s, type) { // ! Changed from (r,angle,s,type) => (x,y,s,type)
     // this.r = r
     // this.angle = angle
-    this.s = s
+    this.size = s
     this.type = type
     this.projs = []
     this.maxProjectiles = 25
@@ -55,7 +55,9 @@ export default class Enemy {
     })
     push()
     fill(255, 50, 50)
-    ellipse(this.x, this.y, this.s, this.s)
+    ellipse(this.x, this.y, this.size, this.size)
+    fill(255,50,50,150)
+    ellipse(this.x, this.y, this.s * random(10,5))
     pop()
   }
 }

@@ -9,7 +9,8 @@ export default class Player {
   */
   constructor(r, s, enemies) {
     this.r = r
-    this.s = s
+    this.size = s
+    this.originalSize = s
     this.angle = 0
 
     this.x = 0
@@ -44,19 +45,35 @@ export default class Player {
         case 38:
           this.move(0, 1)
           break // Up Arrow (Y = 0 in on top 😅)
+        case 32:
+          this.ultra()
+          break
       }
     })
+  }
+
+  ultra(){ // Because "super" was already taken...thx js....
+    if(this.size === this.originalSize){
+      this.size = this.originalSize / 2
+    }
   }
 
   didTouch() {
     let res = false
     this.enemies.forEach(enemy => {
-      enemy.projs.forEach(proj => {
-        const distance = dist(this.x, this.y, proj.x, proj.y)
-        if (distance <= this.s / 2 + proj.size / 2) {
-          res = true
-        }
-      })
+      if(dist(this.x, this.y, enemy.x, enemy.y) < this.size / 2 + enemy.size / 2) {
+        res = true
+      }
+
+      // Checking if touched any projectile
+      if(enemy.projs){
+        enemy.projs.forEach(proj => {
+          const distance = dist(this.x, this.y, proj.x, proj.y)
+          if (distance <= this.size / 2 + proj.size / 2) {
+            res = true
+          }
+        })
+      }
     })
     return res
   }
@@ -102,7 +119,14 @@ export default class Player {
     if (this.isAlive) {
       this.isAlive = !this.didTouch()
       this.angle += this.dx
-      this.s = map(this.r, 0, width / 2, 12, 90) // Resizing when changing distance
+      if(this.size === this.originalSize){
+        this.originalSize = map(this.r, 0, width / 2, 12, 90) // Resizing when changing distance
+        this.size = this.originalSize
+      }else if(this.size < this.originalSize){
+        this.size += 0.5
+      }else {
+        this.size = this.originalSize
+      }
       if (this.r < width / 2) {
         this.r += this.dy
       } else {
@@ -146,7 +170,7 @@ export default class Player {
       const [r, g, b] = this.color
       translate(this.focusedEnemy.x, this.focusedEnemy.y)
       fill(r, g, b)
-      ellipse(this.x, this.y, this.s, this.s)
+      ellipse(this.x, this.y, this.size, this.size)
     } else{
       fill(20)
       rect(0,0,width,height)
