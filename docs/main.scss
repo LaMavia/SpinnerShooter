@@ -1,0 +1,214 @@
+@import url('https://fonts.googleapis.com/css?family=Concert+One');
+
+@mixin phone {
+  @media screen and (max-width: 599px) {
+    @content;
+  }
+}
+
+@mixin tablet-portrait {
+  @media screen and (max-width: 1024px) and (min-width: 768px) {
+    @content;
+  }
+}
+
+@mixin tablet-landscape {
+  @media screen and (max-width: 1366px) and (min-width: 1025px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media screen and (max-width: 1799px) and (min-width: 1200px) {
+    @content;
+  }
+}
+
+@mixin big-desktop-up {
+  @media screen and (min-width: 1800px) {
+    @content;
+  }
+}
+
+:root {
+  --color-rgb: #fff;
+}
+
+$bgColor: #1b1b1b;
+$dark-black: #101010;
+$light-black: #2d2d2d;
+$lime: #01FF70;
+$fuchsia: #F012BE; // pink-ish
+$aqua: #7FDBFF;
+$yellow: #FFDC00;
+$navy: #001f3f;
+$nav-height: 7vh;
+$section-title-font-size: 7vh;
+$section-text-font-size: 3.2vh;
+$bazier: cubic-bezier(0.645, 0.045, 0.355, 1);
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; // backup font
+  transition: 
+    box-shadow       .15s 0s $bazier,
+    text-shadow      .15s 0s $bazier,
+    background-color .15s 0s $bazier
+  ;
+  &::selection{
+    background-color: rgba($fuchsia, 0.6)
+  }
+}
+
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+  background-color: $lime;
+  display: flex;
+  flex-flow: column nowrap;
+  overflow: hidden;
+}
+
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: $nav-height;
+  overflow: hidden;
+  z-index: 10;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    filter: blur(10px);
+    background-color: inherit;
+    z-index: -1;
+  }
+  &__menu {
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+    height: 100%;
+    background-color: $light-black;
+    box-shadow: inset 0 0 10px 2px rgba(21,21,21,0.7);
+
+    &__paths {
+      width: 60%;
+      height: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-flow: row nowrap;
+      list-style: none;
+
+      &__path{
+        flex: 1 0 33%;
+        height: 100%;
+        line-height: $nav-height;
+        text-align: center;
+        
+        &__link{
+          display: block;
+          width: 100%;
+          height: 100%;
+          background-color: transparent;
+          color: #fefefe;
+          text-decoration: none;
+          font-size: $nav-height / 2.6;
+          text-transform: capitalize;
+          text-shadow: 0 0 .2px #1b1b1b;
+          font-family: 'Concert One', cursive;
+
+          &:hover, &:focus{
+            background-color: $aqua;
+            box-shadow: 0 0 5px 2px #000;
+            text-shadow: 0 0 3px #fff;
+          }
+        }
+      }
+    }
+  }
+}
+
+.main{
+  position: absolute;
+  left: 0;
+  top: $nav-height;
+  width: 100vw;
+  min-height: 100vh;
+  height: auto;
+  display: flex;
+  flex-flow: column nowrap;
+
+  &__section{
+    height: 100vh + $nav-height; 
+    width: 100%;
+    padding: 2vh;
+    padding-bottom: 2vh;
+    padding-top: $nav-height;
+
+    &--about{
+      background-color: $yellow;
+    }
+    &--install{
+      background-color: $navy;
+    }
+    &--creators{
+      background-color: $lime;
+    }
+
+    &__title{
+      font-size: $section-title-font-size;
+      text-transform: uppercase;
+      font-family: 'Concert One', cursive;
+      color: #fefefe;
+      text-shadow: 0 0 5px rgba(21,21,21,0.7);
+      text-align: center;
+    }
+
+    &__text{
+      display: block;
+      width: 60%;
+      height: auto;
+      padding: 1vh 0;
+      margin: 0 auto;
+      color: #fff;
+      text-shadow: 0 0 .2px rgba(21,21,21,0.7);
+      font-size: $section-text-font-size;
+      font-weight: 600; 
+      text-align: center;
+    }
+
+    &__list{
+      width: 60%;
+      height: auto;
+      margin: 1vh auto;
+
+      &__item{
+        color: #fff;
+        font-size: 2.7vh;
+
+        &__link{
+          text-decoration: underline $lime;
+          color: $lime;
+        }
+        &__img{
+          object-fit: contain;
+          margin: 0 auto;
+        }
+        &__code{
+          color: $aqua;
+        }
+      }
+    }
+    
+  }
+}

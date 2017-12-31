@@ -1,0 +1,171 @@
+@import url("https://fonts.googleapis.com/css?family=Concert+One");
+:root {
+  --color-rgb: #fff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  transition: box-shadow 0.15s 0s cubic-bezier(0.645, 0.045, 0.355, 1), text-shadow 0.15s 0s cubic-bezier(0.645, 0.045, 0.355, 1), background-color 0.15s 0s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+*::selection {
+  background-color: rgba(240, 18, 190, 0.6);
+}
+
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+  background-color: #01FF70;
+  display: flex;
+  flex-flow: column nowrap;
+  overflow: hidden;
+}
+
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 7vh;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.nav::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  filter: blur(10px);
+  background-color: inherit;
+  z-index: -1;
+}
+
+.nav__menu {
+  display: flex;
+  flex-flow: row nowrap;
+  width: 100%;
+  height: 100%;
+  background-color: #2d2d2d;
+  box-shadow: inset 0 0 10px 2px rgba(21, 21, 21, 0.7);
+}
+
+.nav__menu__paths {
+  width: 60%;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-flow: row nowrap;
+  list-style: none;
+}
+
+.nav__menu__paths__path {
+  flex: 1 0 33%;
+  height: 100%;
+  line-height: 7vh;
+  text-align: center;
+}
+
+.nav__menu__paths__path__link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  color: #fefefe;
+  text-decoration: none;
+  font-size: 2.69231vh;
+  text-transform: capitalize;
+  text-shadow: 0 0 .2px #1b1b1b;
+  font-family: 'Concert One', cursive;
+}
+
+.nav__menu__paths__path__link:hover, .nav__menu__paths__path__link:focus {
+  background-color: #7FDBFF;
+  box-shadow: 0 0 5px 2px #000;
+  text-shadow: 0 0 3px #fff;
+}
+
+.main {
+  position: absolute;
+  left: 0;
+  top: 7vh;
+  width: 100vw;
+  min-height: 100vh;
+  height: auto;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.main__section {
+  height: 107vh;
+  width: 100%;
+  padding: 2vh;
+  padding-bottom: 2vh;
+  padding-top: 7vh;
+}
+
+.main__section--about {
+  background-color: #FFDC00;
+}
+
+.main__section--install {
+  background-color: #001f3f;
+}
+
+.main__section--creators {
+  background-color: #01FF70;
+}
+
+.main__section__title {
+  font-size: 7vh;
+  text-transform: uppercase;
+  font-family: 'Concert One', cursive;
+  color: #fefefe;
+  text-shadow: 0 0 5px rgba(21, 21, 21, 0.7);
+  text-align: center;
+}
+
+.main__section__text {
+  display: block;
+  width: 60%;
+  height: auto;
+  padding: 1vh 0;
+  margin: 0 auto;
+  color: #fff;
+  text-shadow: 0 0 0.2px rgba(21, 21, 21, 0.7);
+  font-size: 3.2vh;
+  font-weight: 600;
+  text-align: center;
+}
+
+.main__section__list {
+  width: 60%;
+  height: auto;
+  margin: 1vh auto;
+}
+
+.main__section__list__item {
+  color: #fff;
+  font-size: 2.7vh;
+}
+
+.main__section__list__item__link {
+  text-decoration: underline #01FF70;
+  color: #01FF70;
+}
+
+.main__section__list__item__img {
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+.main__section__list__item__code {
+  color: #7FDBFF;
+}
