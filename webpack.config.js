@@ -4,9 +4,9 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
   plugins: [
-    new UglifyJsPlugin({
-      test: /\.js($|\?)/i
-    })
+    // new UglifyJsPlugin({
+    //   test: /\.js($|\?)/i
+    // })
   ],
   entry: {
     index: './src/index.js',

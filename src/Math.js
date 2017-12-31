@@ -5,6 +5,13 @@ const polarToCart = (r,angle) => {
   }
 }
 
+const cartToPolar = (x,y) => {
+  return {
+    r: Math.sqrt(x**2 + y**2),
+    angle: Math.atan2(y,x)
+  }
+}
+
 const rand = (max, min = 0) => 
   Math.floor(Math.random() * (max - min) + min)
 
