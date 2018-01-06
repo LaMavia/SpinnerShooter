@@ -1,8 +1,8 @@
-import { polarToCart } from '../Math'
+import { polarToCart, pit } from '../Math'
 import uuid from 'uuid'
 import '../p5'
 export default class Projectile{
-  constructor({ x, y }, size, angle, velocity, acceleration, player){
+  constructor({ x, y }, size, angle, velocity, acceleration, parent){
     this.startX = x
     this.startY = y
     this.x = x
@@ -16,6 +16,7 @@ export default class Projectile{
     this.range = 500 // Disapears after reaching that range
     this.arr = []
     this.id = uuid.v4()
+    this.parent = parent
   }
 
   update(){
@@ -23,10 +24,10 @@ export default class Projectile{
     this.v += this.acc
     this.r += this.v
     let { x, y } = polarToCart(this.r, this.angle)
-    this.x = x
-    this.y = y
+    this.x = x 
+    this.y = y 
 
-    if(this.r + this.size / 2 > this.range || this.alpha <= 0){
+    if(this.r + this.size / 2 > this.range || this.alpha <= 0 || this.size <= 0){
       const i = this.arr.findIndex(it => it.id === this.id)
       this.arr.splice(i,1)
     }
